@@ -9,10 +9,17 @@ struct Row
     std::size_t str_len;
 
     std::size_t &operator[](std::size_t);
+    const std::size_t &operator[](std::size_t) const;
 };
 
 std::size_t &
 Row::operator[](std::size_t colno)
+{
+    return data[colno];
+}
+
+const std::size_t &
+Row::operator[](std::size_t colno) const
 {
     return data[colno];
 }
@@ -50,17 +57,17 @@ std::string
 Triangle::str(void)
 {
     std::ostringstream oss {};
-    Row &base_row = rows[height - 1];
+    const Row &base_row = rows[height - 1];
     for (std::size_t rowno {0}; rowno < height; ++rowno)
     {
-        Row &row = rows[rowno];
+        const Row &row = rows[rowno];
 
         // Pad on the left for centering
         std::size_t pad_len 
         {
             (base_row.str_len - row.str_len) / 2
         };
-        for (std::size_t i = 0; i < pad_len; ++i)
+        for (std::size_t i {0}; i < pad_len; ++i)
         {
             oss << " ";
         }
@@ -76,9 +83,12 @@ Triangle::str(void)
 }
 
 int 
-main()
+main(int argc, char *argv[])
 {
-    Triangle t {15};
+    std::cout << "Enter height: ";
+    size_t height {};
+    std::cin >> height;
+    Triangle t {height};
     std::cout << t.str();
     return 0;
 }
